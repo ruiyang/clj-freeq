@@ -25,21 +25,7 @@
                     :EXP (fn [& args] (fn [data] (reduce #(or %1 (%2 data)) false args)))
                     })
 
-(def data {:abc {:def true} :def {:gh false} :hh {:ii true} :gg {:ff true}})
-
-((instaparse.core/transform
-  transform-map
-  ((insta/parser exp) "equal(abc.def, hh.ii)")) data)
-
-((instaparse.core/transform
-  transform-map
-  ((insta/parser exp) "abc.def AND abc.def AND (def.gh AND def.gg OR hh.ii)")) data)
-
 (defn create-filter [filter-expression]
   (instaparse.core/transform
    transform-map
    ((insta/parser exp) filter-expression)))
-
-(def test-filter (create-filter "abc.def AND (def.gh AND def.gg OR hh.ii)"))
-
-(test-filter data)
