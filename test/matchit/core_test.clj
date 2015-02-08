@@ -35,4 +35,12 @@
      (= (test-expression-with-data "vegeterian AND single" sample-data)
         false))))
 
+(deftest simple-function-call
+  (testing "should call simple function"
+    (are [expression expected-result] (= (test-expression-with-data expression sample-data) expected-result)
+         "equal(name,\"simple name\")" true
+         "equal(age,24)" false
+         "equal(age, 24)" false
+         "equal(age, 24 )" false
+         "equal(age,25)" true)))
 ;; (run-all-tests #"matchit.core-test")

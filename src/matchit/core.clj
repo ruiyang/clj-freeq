@@ -1,15 +1,18 @@
 (ns matchit.core
-  (:require [instaparse.core :as insta]))
+  (:require [instaparse.core :as insta]
+            [clojure.edn :as edn]))
 
 (def exp "EXP = (AND_EXPRESSION | GROUP_EXP) (<LOGICAL_OR> EXP)*
   <GROUP_EXP> = <SEPERATOR*> <\"(\"> <SEPERATOR*> EXP <SEPERATOR*> <\")\"> <SEPERATOR*>
   LOGICAL_AND = <SEPERATOR*> \"AND\" <SEPERATOR*>;
   LOGICAL_OR = <SEPERATOR*> \"OR\" <SEPERATOR*>;
   AND_EXPRESSION = (VALUE_EXP | FUNC_CALL) (<LOGICAL_AND> (VALUE_EXP | GROUP_EXP | FUNC_CALL))*
-  FUNC_CALL = NAME <\"(\"> ((VALUE_EXP <FUNC_PARAMETER_SEPARATOR>)* VALUE_EXP |Epsilon) <\")\">
-  <FUNC_PARAMETER_SEPARATOR> = \",\"
+  FUNC_CALL = NAME <\"(\"> <SEPERATOR*> (((VALUE_EXP | LITERAL) <FUNC_PARAMETER_SEPARATOR>)* (VALUE_EXP | LITERAL) |Epsilon) <SEPERATOR*>  <\")\">
+  <LITERAL> = (STRING | DIGIT)
+  STRING = <'\"'> #'[^\"]*' <'\"'>
+  DIGIT = ('-')? #\"[0-9]+\"
+  <FUNC_PARAMETER_SEPARATOR> = SEPERATOR? \",\" SEPERATOR?
   <SEPERATOR> = \" \"+
-  <OPERATOR> =#\"(<|>)\";
   NAME=#\"[A-Za-z]+\";
   VALUE_EXP=<SEPERATOR*> NAME(<#\"\\.\">NAME)* <SEPERATOR*>")
 
@@ -22,6 +25,8 @@
                     :VALUE_EXP (fn [& args] (fn [data] (get-in data (map keyword args))))
                     :AND_EXPRESSION (fn [& args] (fn [data] (reduce #(and %1 (%2 data)) true args)))
                     :FUNC_CALL (fn [& args] (fn [data] (apply ((keyword (nth args 0)) customize-function-map) (map #(% data) (rest args)))))
+                    :STRING (fn [& args] (fn [data] (nth args 0)))
+                    :DIGIT (fn [& args] (fn [data] (edn/read-string (nth args 0))))
                     :EXP (fn [& args] (fn [data] (reduce #(or %1 (%2 data)) false args)))
                     })
 
