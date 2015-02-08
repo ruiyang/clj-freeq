@@ -42,5 +42,6 @@
          "equal(age,24)" false
          "equal(age, 24)" false
          "equal(age, 24 )" false
-         "equal(age,25)" true)))
+         "equal(age,25)" true
+         "equal(age, 25 )" true)))
 ;; (run-all-tests #"matchit.core-test")
