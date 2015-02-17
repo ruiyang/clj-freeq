@@ -1,6 +1,6 @@
-* Matchit
+* Clj-freeq
 
-A expression based matching engine
+A free text expression based filter engine
 
 * Usage
 
