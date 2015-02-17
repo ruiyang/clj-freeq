@@ -1,6 +1,6 @@
-(ns matchit.core-test
+(ns clj-freeq.core-test
   (:require [clojure.test :refer :all]
-            [matchit.core :refer :all]))
+            [clj-freeq.core :refer :all]))
 
 (defn test-expression-with-data [expression data]
   "Given an expression, create the according filter function and apply it to data."

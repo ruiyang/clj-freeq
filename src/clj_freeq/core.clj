@@ -1,4 +1,4 @@
-(ns matchit.core
+(ns clj-freeq.core
   (:require [instaparse.core :as insta]
             [clojure.edn :as edn]))
 
