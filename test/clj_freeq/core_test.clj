@@ -44,4 +44,18 @@
          "equal(age, 24 )" false
          "equal(age,25)" true
          "equal(age, 25 )" true)))
+
+(deftest simple-or-expression
+  (testing "should test or condition"
+    (are [expression expected-result] (= (test-expression-with-data expression sample-data) expected-result)
+         "equal(age, 25) OR equal(gender, \"male\")" true
+         "equal(age, 24) OR equal(gender, \"female\")" false
+         "equal(age, 24) OR equal(gender, \"male\")" true
+         )))
+
+(deftest simple-group-expression
+  (testing "should test condition grouping"
+    (are [expression expected-result] (= (test-expression-with-data expression sample-data) expected-result)
+         "equal(gender, \"female\") OR (equal(age, 24) OR equal(name, \"simple name\"))" true
+         )))
 ;; (run-all-tests #"matchit.core-test")
