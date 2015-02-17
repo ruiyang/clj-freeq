@@ -4,7 +4,15 @@ A free text expression based filter engine
 
 * Usage
 
-FIXME
+- build the project and publish to local repository
+
+lein install
+
+- add dependency to your project.clj
+  [clj-freeq "0.1.0-SNAPSHOT"]
+
+- require 'clj-freeq.core into your clj file
+- call create-filter to create a filter function and pass the map which should align with keys in expression as parameter
 
 * License
 
