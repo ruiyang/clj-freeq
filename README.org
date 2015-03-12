@@ -2,6 +2,12 @@
 
 A free text expression based filter engine
 
+* Publish to local mvn repository
+Firstly make sure that you have mvn installed. By default, mvn will download repository to your ~/.m2/repository. The following command will publish clj-freeq into your local mvn repository.
+mvn install:install-file -Dfile=target/freeq-match-engine-0.0.1-SNAPSHOT.jar -DartifactId=clj-freeq -Dversion=0.0.1-SNAPSHOT -DgroupId=clj-freeq -Dpackaging=jar -DlocalRepositoryPath=<absolute-path-to-local-repo>
+Then in your project.clj, add the following option:
+   :repositories \[["local" ~(str (.toURI (java.io.File. "<absolute-path-to-local-repo>")))]\]
+
 * Usage
 
 - build the project and publish to local repository
