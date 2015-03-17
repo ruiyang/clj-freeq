@@ -34,3 +34,15 @@
   (instaparse.core/transform
    transform-map
    ((insta/parser exp) filter-expression)))
+
+(defn- transform [vec]
+  (let [key (get vec 0)
+        val (get vec 1)]
+    (if (vector? val)
+      {key (transform val)}
+      {key val})))
+
+(defn parse [filter-expression]
+  "given an expression, return the AST"
+  (transform
+   ((insta/parser exp) filter-expression)))
