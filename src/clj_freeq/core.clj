@@ -35,14 +35,17 @@
    transform-map
    ((insta/parser exp) filter-expression)))
 
-(defn- transform [vec]
+(defn- transform-to-map [vec]
   (let [key (get vec 0)
         val (get vec 1)]
     (if (vector? val)
-      {key (transform val)}
-      {key val})))
+      {key (transform-to-map (nth (rest vec) 0))}
+      {key (rest vec)})))
 
 (defn parse [filter-expression]
   "given an expression, return the AST"
-  (transform
-   ((insta/parser exp) filter-expression)))
+  (transform-to-map
+   (insta/transform
+    {:VALUE_EXP (fn [& args] (clojure.string/join "." args))
+     :NAME (fn [& args] (apply str args))}
+    ((insta/parser exp) filter-expression))))

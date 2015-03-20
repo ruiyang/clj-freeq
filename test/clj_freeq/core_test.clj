@@ -58,4 +58,13 @@
     (are [expression expected-result] (= (test-expression-with-data expression sample-data) expected-result)
          "equal(gender, \"female\") OR (equal(age, 24) OR equal(name, \"simple name\"))" true
          )))
+
+(deftest return-parse-tree-as-map
+  (testing "should return parsed expression tree as map"
+    (are [expression expected-result] (= (parse expression) expected-result)
+         "equal(gender, \"female\") OR (equal(age, 24) OR equal(name, \"simple name\"))" {:abc "def"}
+         )))
+
+(parse "equal(gender, \"female\") OR (equal(age, 24) OR equal(name, \"simple name\"))")
+
 ;; (run-all-tests #"matchit.core-test")
