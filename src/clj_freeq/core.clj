@@ -39,13 +39,17 @@
   (let [key (get vec 0)
         val (get vec 1)]
     (if (vector? val)
-      {key (transform-to-map (nth (rest vec) 0))}
+      {key (map transform-to-map (rest vec))}
       {key (rest vec)})))
+[:EXP [:AND_EXPRESSION [:FUNC_CALL "equal" "boy.age" "girl.age"] [:FUNC_CALL "equal" "boy.height" "girl.height"]]]
 
 (defn parse [filter-expression]
   "given an expression, return the AST"
   (transform-to-map
    (insta/transform
     {:VALUE_EXP (fn [& args] (clojure.string/join "." args))
-     :NAME (fn [& args] (apply str args))}
+     :NAME (fn [& args] (apply str args))
+     :STRING (fn [& args] (str \' (nth args 0) \'))
+     :DIGIT (fn [& args] (str (nth args 0)))
+     }
     ((insta/parser exp) filter-expression))))
