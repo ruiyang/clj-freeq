@@ -51,18 +51,21 @@
          "equal(age, 25) OR equal(gender, \"male\")" true
          "equal(age, 24) OR equal(gender, \"female\")" false
          "equal(age, 24) OR equal(gender, \"male\")" true
+         "equal(age, 24) OR equal(gender, \"male\")" true
          )))
 
 (deftest simple-group-expression
   (testing "should test condition grouping"
     (are [expression expected-result] (= (test-expression-with-data expression sample-data) expected-result)
          "equal(gender, \"female\") OR (equal(age, 24) OR equal(name, \"simple name\"))" true
+         "equal(gender, \"male\") OR (equal(age, 24) OR equal(name, \"simple name\"))" true
+         "equal(gender, \"male2\") OR (equal(age, 29) OR equal(name, \"simple name2\"))" false
          )))
 
 (deftest return-parse-tree-as-map
   (testing "should return parsed expression tree as map"
     (are [expression expected-result] (= (parse expression) expected-result)
-         "equal(gender, \"female\") OR (equal(age, 24) OR equal(name, \"simple name\"))" {:EXP (list {:AND_EXPRESSION (list {:FUNC_CALL '("equal" "gender" "'female'")})} {:EXP (list {:EXP (list {:AND_EXPRESSION (list {:FUNC_CALL '("equal" "age" "24")})} {:EXP (list {:AND_EXPRESSION (list {:FUNC_CALL '("equal" "name" "'simple name'")})})})})})}
+         "equal(gender, \"female\") OR (equal(age, 24) OR equal(name, \"simple name\"))" {:OR (list {:FUNC_CALL '("equal" "gender" "'female'")} {:OR (list {:FUNC_CALL '("equal" "age" "24")} {:FUNC_CALL '("equal" "name" "'simple name'")})})}
          )))
 
 ;; (run-all-tests #"matchit.core-test")

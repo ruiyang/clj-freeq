@@ -41,7 +41,6 @@
     (if (vector? val)
       {key (map transform-to-map (rest vec))}
       {key (rest vec)})))
-[:EXP [:AND_EXPRESSION [:FUNC_CALL "equal" "boy.age" "girl.age"] [:FUNC_CALL "equal" "boy.height" "girl.height"]]]
 
 (defn parse [filter-expression]
   "given an expression, return the AST"
@@ -51,5 +50,9 @@
      :NAME (fn [& args] (apply str args))
      :STRING (fn [& args] (str \' (nth args 0) \'))
      :DIGIT (fn [& args] (str (nth args 0)))
+     :AND_EXPRESSION (fn [& args] (if (< (count args) 2) (nth args 0) (let [new-args [:AND]]
+                                                                        (into new-args args))))
+     :EXP (fn [& args] (if (< (count args) 2) (nth args 0) (let [new-args [:OR]]
+                                                             (into new-args args))))
      }
     ((insta/parser exp) filter-expression))))
