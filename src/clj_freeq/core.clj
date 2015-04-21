@@ -1,20 +1,10 @@
 (ns clj-freeq.core
   (:require [instaparse.core :as insta]
-            [clojure.edn :as edn]))
+            [clojure.edn :as edn]
+            [clojure.java.io :as io]))
 
-(def exp "EXP = (AND_EXPRESSION | GROUP_EXP) (<LOGICAL_OR> EXP)*
-  <GROUP_EXP> = <SEPERATOR*> <\"(\"> <SEPERATOR*> EXP <SEPERATOR*> <\")\"> <SEPERATOR*>
-  LOGICAL_AND = <SEPERATOR*> \"AND\" <SEPERATOR*>;
-  LOGICAL_OR = <SEPERATOR*> \"OR\" <SEPERATOR*>;
-  AND_EXPRESSION = (VALUE_EXP | FUNC_CALL) (<LOGICAL_AND> (VALUE_EXP | GROUP_EXP | FUNC_CALL))*
-  FUNC_CALL = NAME <\"(\"> <SEPERATOR*> (((VALUE_EXP | LITERAL) <FUNC_PARAMETER_SEPARATOR>)* (VALUE_EXP | LITERAL) |Epsilon) <SEPERATOR*>  <\")\">
-  <LITERAL> = (STRING | DIGIT)
-  STRING = <'\"'> #'[^\"]*' <'\"'>
-  DIGIT = ('-')? #\"[0-9]+\"
-  <FUNC_PARAMETER_SEPARATOR> = SEPERATOR? \",\" SEPERATOR?
-  <SEPERATOR> = \" \"+
-  NAME=#\"[A-Za-z]+\";
-  VALUE_EXP=<SEPERATOR*> NAME(<#\"\\.\">NAME)* <SEPERATOR*>")
+(def exp (slurp (io/file
+                 (io/resource "grammer.txt"))))
 
 (def customize-function-map {
                              :equal =
