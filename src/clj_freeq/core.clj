@@ -8,6 +8,7 @@
 
 (def customize-function-map {
                              :equal =
+                             :contains (fn [a b] (.contains (str a) (str b)))
                              })
 
 (def transform-map {:ATTR_ACCESS (fn [& args] (keyword (nth args 1)))

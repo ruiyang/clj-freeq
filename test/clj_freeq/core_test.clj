@@ -45,6 +45,15 @@
          "equal(age,25)" true
          "equal(age, 25 )" true)))
 
+(deftest simple-function-call-contains
+  (testing "should test string contains"
+    (are [expression expected-result] (= (test-expression-with-data expression sample-data) expected-result)
+         "contains(name, \"sim\")" true
+         "contains(name, \"simple \")" true
+         "contains(name, \"simple name\")" true
+         "contains(name, \"name\")" true
+         "contains(name, \"name2\")" false)))
+
 (deftest simple-or-expression
   (testing "should test or condition"
     (are [expression expected-result] (= (test-expression-with-data expression sample-data) expected-result)
